@@ -178,3 +178,5 @@ The small one (`golanggopher, crab`):
 You can find some examples at [https://github.com/rsteube/gopher](https://github.com/rsteube/gopher).
 
 Have fun!
+
+![](./go-bigger-than-crab/montage.png)
