@@ -70,13 +70,13 @@ Under `Settings` you can configure it to allow remote access.
 - **Number of Images**: `4` to have some options to choose from.
 - **Model**: `AnythingV5Ink_ink` or keep the standard model.
 - **Image Size**: `512x512` is fine for the usual gopher image as we can upscale it later but you can choose a different format.
-- **LoRa**: `gophers_v1 [0.5]` and optionally `ghibli_style_offset [0.5]` as well
+- **LoRa**: `gophers_v1 [0.5]` and optionally `ghibli_style_offset [0.5]` as well.
 - **Output Format**: `png`
 
 ![](./go-bigger-than-crab/settings-image.png)
 
 > Images are **NOT STORED** by default and closing the browser tab causes loss of data.
-> So often save the generated `image` and `json`.
+> So remember to save the generated `image` and `json`.
 > You can do this by highlighting it and clicking the corresponding button.
 > Or download the full set with `Download images` at the top.
 
