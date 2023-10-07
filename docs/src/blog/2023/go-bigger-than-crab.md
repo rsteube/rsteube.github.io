@@ -48,7 +48,7 @@ Place it into `EasyDiffusion/models/lora/`.
 - sd (top-left)
 - sd+gopher (top-right)
 - anything+gopher (bottom-left)
-- antything+gopher+ghibli (bottom-right)
+- anything+gopher+ghibli (bottom-right)
 
 ![](./go-bigger-than-crab/models.png)
 
