@@ -94,7 +94,7 @@ Be sure to add one of `golangGopher` (recommended), `gopherArt`, `gopherCircle` 
 There is also the `Negative Prompt` where you can define what you **don't** want in the image.
 You may add `rust, ferris` here, but best to leave this for later when you want to get rid of something specific.
 
-## The first try
+## The first attempt
 
 Fill the prompt with `golanggopher, <keywords...>` and hit `Make`.
 
