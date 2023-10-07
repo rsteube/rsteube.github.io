@@ -41,7 +41,7 @@ This one is optional but also has some nice effects when adding it into the mix.
 
 Place it into `EasyDiffusion/models/lora/`.
 
-> See [What are LoRA models and how to use them in AUTOMATIC1111](https://stable-diffusion-art.com/lora/) for the difference between Lora and base models.
+> See [What are LoRA models and how to use them in AUTOMATIC1111](https://stable-diffusion-art.com/lora/) for the difference between LoRa and base models.
 
 ### Example
 
