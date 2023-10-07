@@ -178,3 +178,5 @@ The small one (`golanggopher, crab`):
 You can find some examples at [https://github.com/rsteube/gopher](https://github.com/rsteube/gopher).
 
 Have fun!
+
+Oh, and [give Easy Diffusion a tip](https://ko-fi.com/easydiffusion) if you like it.
