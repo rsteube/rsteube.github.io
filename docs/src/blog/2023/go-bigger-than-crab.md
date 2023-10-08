@@ -32,8 +32,8 @@ If you are looking for the classic gopher style use the default (`sd-v1-5`), but
 
 Place it into `EasyDiffusion/models/stable-diffusion/`.
 
-> It tends to give the gophers a bit of a teddy bear look though so experiment with the settings
-> and regenerate until you get something that pleases you.
+> It tends to give the gophers a bit of a teddy bear look though so experiment with the settings (e.g. increase the strength of the golang LoRa to `0.8`).
+> And regenerate until you get something that pleases you.
 
 4. [**Studio Ghibli Style LoRA**](https://civitai.com/models/6526?modelVersionId=7657)
 
