@@ -131,7 +131,6 @@ Save it, hit `Make` and if you're lucky that fixes it.
 
 > If it didn't work you can try to add `teeth` to the prompt.
 > Otherwise set the `seed` to random and try again.
-> It is also possible to `Draw` (above `Inpaint`) on the image some rough sketches for guidance.
 
 ## Fixing the logo
 
