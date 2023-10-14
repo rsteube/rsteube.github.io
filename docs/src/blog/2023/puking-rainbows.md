@@ -42,7 +42,7 @@ This one is easy.
 
 ### Styled
 
-[Elvish] provides an abstraction for escape codes using a list of human-readable keywords.
+[Elvish] provides an abstraction for escape sequences using a list of human-readable keywords.
 
 ```sh
 echo (styled "dim bold underlined magenta" dim bold underlined magenta)
