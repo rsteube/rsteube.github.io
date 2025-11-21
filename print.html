@@ -1,0 +1,797 @@
+<!DOCTYPE HTML>
+<html lang="en" class="mocha" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>rsteube</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="asciinema/asciinema-player.css">
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "mocha";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('mocha')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="blog.html"><strong aria-hidden="true">1.</strong> Blog</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="blog/2023.html"><strong aria-hidden="true">1.1.</strong> 2023</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="blog/2023/go-bigger-than-crab.html"><strong aria-hidden="true">1.1.1.</strong> Go is bigger than crab!</a></li><li class="chapter-item expanded "><a href="blog/2023/puking-rainbows.html"><strong aria-hidden="true">1.1.2.</strong> Puking Rainbows</a></li></ol></li><li class="chapter-item expanded "><a href="blog/2022.html"><strong aria-hidden="true">1.2.</strong> 2022</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="blog/2022/a-pragmatic-approach-to-shell-completion.html"><strong aria-hidden="true">1.2.1.</strong> A pragmatic approach to shell completion</a></li></ol></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">rsteube</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rsteube/rsteube.github.io" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="blog"><a class="header" href="#blog">Blog</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="2023"><a class="header" href="#2023">2023</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="go-is-bigger-than-crab"><a class="header" href="#go-is-bigger-than-crab">Go is bigger than crab!</a></h1>
+<p>Ever wanted your custom <a href="https://go.dev/blog/gopher">Gopher</a> but didn't have the drawing skills?</p>
+<p>Well seems now you can generate them.
+Type the title into your favorite AI prompt to get this:</p>
+<p><img src="blog/2023/./go-bigger-than-crab/go-bigger-than-crab.png" alt="" /></p>
+<p>Well no. But it's close enough so let's dive in...</p>
+<h2 id="what-you-need"><a class="header" href="#what-you-need">What you need</a></h2>
+<ol>
+<li><a href="https://easydiffusion.github.io/"><strong>Easy Diffusion</strong></a></li>
+</ol>
+<p>Which is a 1-click install of <a href="https://github.com/CompVis/stable-diffusion">Stable Diffusion</a>
+with an alternative web interface.
+You can choose a different approach but this one is pretty simple and I am new to this stuff.</p>
+<blockquote>
+<p>Make sure you meet the hardware requirements (GPU) and have enough disk space (this is a whopping 20+GB install).</p>
+</blockquote>
+<ol start="2">
+<li><a href="https://civitai.com/models/125264?modelVersionId=136827"><strong>golang gopher</strong></a></li>
+</ol>
+<p>This one does all the magic to ensure the generated image resembles a gopher.</p>
+<p>Place it into <code>EasyDiffusion/models/lora/</code>.</p>
+<ol start="3">
+<li><a href="https://civitai.com/models/9409"><strong>Anything V5/Ink</strong></a></li>
+</ol>
+<p>By pure chance, I used this model instead of the default one and it gave amazing results.
+If you are looking for the classic gopher style use the default (<code>sd-v1-5</code>), but this one is more fun.</p>
+<p>Place it into <code>EasyDiffusion/models/stable-diffusion/</code>.</p>
+<blockquote>
+<p>It tends to give the gophers a bit of a teddy bear look though so experiment with the settings (e.g. increase the strength of the golang LoRa to <code>0.8</code>).
+And regenerate until you get something that pleases you.</p>
+</blockquote>
+<ol start="4">
+<li><a href="https://civitai.com/models/6526?modelVersionId=7657"><strong>Studio Ghibli Style LoRA</strong></a></li>
+</ol>
+<p>This one is optional but also has some nice effects when adding it into the mix.</p>
+<p>Place it into <code>EasyDiffusion/models/lora/</code>.</p>
+<blockquote>
+<p>See <a href="https://stable-diffusion-art.com/lora/">What are LoRA models and how to use them in AUTOMATIC1111</a> for the difference between LoRa and base models.</p>
+</blockquote>
+<h3 id="example"><a class="header" href="#example">Example</a></h3>
+<ul>
+<li>sd (top-left)</li>
+<li>sd+gopher (top-right)</li>
+<li>anything+gopher (bottom-left)</li>
+<li>anything+gopher+ghibli (bottom-right)</li>
+</ul>
+<p><img src="blog/2023/./go-bigger-than-crab/models.png" alt="" /></p>
+<h2 id="settings"><a class="header" href="#settings">Settings</a></h2>
+<p>Start <code>Easy Diffusion</code> and it should open <a href="http://localhost:9000/">http://localhost:9000/</a> in your browser.</p>
+<h3 id="network-access"><a class="header" href="#network-access">Network access</a></h3>
+<p>Under <code>Settings</code> you can configure it to allow remote access.</p>
+<blockquote>
+<p>It is <strong>NOT SECURED</strong> so best to only do this in a safe local environment.</p>
+</blockquote>
+<p><img src="blog/2023/./go-bigger-than-crab/settings-network.png" alt="" /></p>
+<h3 id="image"><a class="header" href="#image">Image</a></h3>
+<ul>
+<li><strong>Seed</strong>: <code>Random</code> for new creations.</li>
+<li><strong>Number of Images</strong>: <code>4</code> to have some options to choose from.</li>
+<li><strong>Model</strong>: <code>AnythingV5Ink_ink</code> or keep the standard model.</li>
+<li><strong>Image Size</strong>: <code>512x512</code> is fine for the usual gopher image as we can upscale it later but you can choose a different format.</li>
+<li><strong>LoRa</strong>: <code>gophers_v1 [0.5]</code> and optionally <code>ghibli_style_offset [0.5]</code> as well.</li>
+<li><strong>Output Format</strong>: <code>png</code></li>
+</ul>
+<p><img src="blog/2023/./go-bigger-than-crab/settings-image.png" alt="" /></p>
+<blockquote>
+<p>Images are <strong>NOT STORED</strong> by default and closing the browser tab causes loss of data.
+So remember to save the generated <code>image</code> and <code>json</code>.
+You can do this by highlighting it and clicking the corresponding button.
+Or download the full set with <code>Download images</code> at the top.</p>
+</blockquote>
+<h2 id="the-prompt"><a class="header" href="#the-prompt">The Prompt</a></h2>
+<p>In the Prompt, you can add a comma-separated list of keywords of what you want in the image.
+You can also emphasize specific keywords with brackets (e.g. <code>(coffee)</code> or <code>(holding a mug)</code>).</p>
+<p>Be sure to add one of <code>golangGopher</code> (recommended), <code>gopherArt</code>, <code>gopherCircle</code> or <code>gopher3d</code> for the gopher model.</p>
+<p><img src="blog/2023/./go-bigger-than-crab/prompt.png" alt="" /></p>
+<blockquote>
+<p>Have a look at the <a href="https://stable-diffusion-art.com/prompt-guide/">Prompt Guide</a> for advanced techniques.</p>
+</blockquote>
+<p>There is also the <code>Negative Prompt</code> where you can define what you <strong>don't</strong> want in the image.
+You may add <code>rust, ferris</code> here, but best to leave this for later when you want to get rid of something specific.</p>
+<h2 id="the-first-attempt"><a class="header" href="#the-first-attempt">The first attempt</a></h2>
+<p>Fill the prompt with <code>golanggopher, &lt;keywords...&gt;</code> and hit <code>Make</code>.</p>
+<p>Here's what I got for <code>golanggopher, podcast</code>:</p>
+<p><img src="blog/2023/./go-bigger-than-crab/podcast-01.png" alt="" /></p>
+<blockquote>
+<p>If there is nothing of interest try again.
+But if one has a nice theme or composition don't start from zero.
+Highlight the image and click <code>Make Similar Images</code> to use it as input.</p>
+</blockquote>
+<p>In my case, the upper left already looks pretty nice, but there are some issues...</p>
+<h2 id="fixing-the-teeth"><a class="header" href="#fixing-the-teeth">Fixing the teeth</a></h2>
+<p>See how there are no teeth? This happens pretty often when they are missing or not right.
+Highlight the image and click <code>Use as Input</code>.</p>
+<p><img src="blog/2023/./go-bigger-than-crab/podcast-02.png" alt="" /></p>
+<blockquote>
+<p>If you've done something else in the meantime you should select <code>Use these settings</code> on the top right first.</p>
+</blockquote>
+<p>Klick <code>Inpaint</code>.</p>
+<p><img src="blog/2023/./go-bigger-than-crab/podcast-03.png" alt="" /></p>
+<p>Mask the part to regenerate.</p>
+<p><img src="blog/2023/./go-bigger-than-crab/podcast-04.png" alt="" /></p>
+<p>Save it, hit <code>Make</code> and if you're lucky that fixes it.</p>
+<p><img src="blog/2023/./go-bigger-than-crab/podcast-05.png" alt="" /></p>
+<blockquote>
+<p>If it didn't work you can try to add <code>teeth</code> to the prompt.
+Otherwise set the <code>seed</code> to random and try again.</p>
+</blockquote>
+<h2 id="fixing-the-logo"><a class="header" href="#fixing-the-logo">Fixing the logo</a></h2>
+<p>The logo looks okay, but it isn't an <code>O</code>.
+It's pretty close though, so mask the part that doesn't fit.</p>
+<p><img src="blog/2023/./go-bigger-than-crab/podcast-06.png" alt="" /></p>
+<p>This one worked on the first try.</p>
+<p><img src="blog/2023/./go-bigger-than-crab/podcast-07.png" alt="" /></p>
+<h2 id="upscale"><a class="header" href="#upscale">Upscale</a></h2>
+<p>Finally, highlight the image and click <code>Upscale</code> for a higher resolution.
+Then highlight it again to save it with <code>Download Image</code>.</p>
+<p><img src="blog/2023/./go-bigger-than-crab/podcast-08.png" alt="" /></p>
+<h2 id="so-what-about-the-big-one-above"><a class="header" href="#so-what-about-the-big-one-above">So what about the big one above</a></h2>
+<p>That is a composition of two generated images.</p>
+<p>The big one (<code>golanggopher, studio ghibli, totoro</code>):</p>
+<p><img src="blog/2023/./go-bigger-than-crab/go-bigger.png" alt="" /></p>
+<p>The small one (<code>golanggopher, crab</code>):</p>
+<p><img src="blog/2023/./go-bigger-than-crab/crab.png" alt="" /></p>
+<ul>
+<li>By removing the background.</li>
+<li>Placing it over the other image.</li>
+<li>Overpainting parts of the old gopher.</li>
+<li>Importing it in <code>Easy Diffusion</code> as <code>Input</code>.</li>
+<li>Masking the outline for inpainting.</li>
+<li>And letting it regenerate various parts a couple of iterations.</li>
+<li>It ended up as above.</li>
+</ul>
+<p><img src="blog/2023/./go-bigger-than-crab/composition.png" alt="" /></p>
+<h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
+<p>You can find some examples at <a href="https://github.com/rsteube/gopher">https://github.com/rsteube/gopher</a>.</p>
+<p>Have fun!</p>
+<p>Oh, and <a href="https://ko-fi.com/easydiffusion">give Easy Diffusion a tip</a> if you like it.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="puking-rainbows"><a class="header" href="#puking-rainbows">Puking Rainbows</a></h1>
+<p><img src="blog/2023/./puking-rainbows/puking-rainbows-banner.png" alt="" /></p>
+<p>Shells support colored output. Some do so also during tab completion.</p>
+<p>It can provide extra context like whether an issue is <strong>open</strong> (green) or <strong>closed</strong> (red).
+Or reflect the color of labels:</p>
+<p><img src="blog/2023/./puking-rainbows/labels.png" alt="" /></p>
+<p>Here is how this works and how it is done in <a href="https://github.com/rsteube/carapace">carapace</a>...</p>
+<h2 id="ansi-escape-sequences"><a class="header" href="#ansi-escape-sequences">ANSI escape sequences</a></h2>
+<p>Text style is set in the shell using an escape sequence like <code>\e[31;42m</code>.
+This instructs the terminal that the text following it is <strong>red</strong> (31) with a <strong>green background</strong> (41).</p>
+<p>It consists of</p>
+<ul>
+<li><code>\e</code> escape.</li>
+<li><code>[</code> an opening square bracket.</li>
+<li><code>31;42</code> a semicolon-separated list of escape codes.</li>
+<li><code>m</code> the letter m.</li>
+</ul>
+<p>A common approach is to restore the default style using <code>\e[0m</code> afterwards.</p>
+<pre><code class="language-sh">echo "\e[1;2;4;35mdim bold underlined magenta\e[0m" # you might need `echo -e` for this
+</code></pre>
+<p><img src="blog/2023/./puking-rainbows/ansi-example.png" alt="" /></p>
+<p>There are basic <strong>foreground colors</strong> (30-37), <strong>background colors</strong> (40-47),
+<strong>modes</strong> (1-9) and <strong>reset</strong> (0) to restore the default. <strong>256-colors</strong>
+and <strong>RGB</strong> are also possible.</p>
+<blockquote>
+<p>You can find a full list at <a href="https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797">ANSI Escape Sequences</a>.</p>
+</blockquote>
+<h2 id="elvish"><a class="header" href="#elvish">Elvish</a></h2>
+<p>This one is easy.</p>
+<h3 id="styled"><a class="header" href="#styled">Styled</a></h3>
+<p><a href="https://elv.sh/">Elvish</a> provides an abstraction for escape sequences using a list of human-readable keywords.</p>
+<pre><code class="language-sh">echo (styled "dim bold underlined magenta" dim bold underlined magenta)
+</code></pre>
+<p><img src="blog/2023/./puking-rainbows/elvish-styled.png" alt="" /></p>
+<blockquote>
+<p>You can read more about this at <a href="https://elv.sh/ref/builtin.html#styled">styled</a>.</p>
+</blockquote>
+<h3 id="complex-candidate"><a class="header" href="#complex-candidate">Complex candidate</a></h3>
+<p>Adding colors to tab completion is thus pretty easy with <a href="https://elv.sh/ref/edit.html#edit:complex-candidate">edit:complex-candidate</a>.</p>
+<pre><code class="language-sh">set edit:completion:arg-completer[example] = {|@args|
+  edit:complex-candidate true &amp;display=(styled true green)' (true in green)'
+  edit:complex-candidate false &amp;display=(styled false red)' (false in red)'
+}
+</code></pre>
+<p><img src="blog/2023/./puking-rainbows/elvish-example.png" alt="" /></p>
+<h2 id="powershell"><a class="header" href="#powershell">Powershell</a></h2>
+<p>This one is a bit tricky.</p>
+<h3 id="backtick"><a class="header" href="#backtick">Backtick</a></h3>
+<p>First of all, the escape character is different in <a href="https://learn.microsoft.com/en-us/powershell/">Powershell</a>.
+It uses <strong>backtick</strong> instead of <strong>backslash</strong>.</p>
+<pre><code class="language-sh">echo "`e[1;2;4;35mdim bold underlined magenta`e[0m"
+</code></pre>
+<p><img src="blog/2023/./puking-rainbows/powershell-ansi.png" alt="" /></p>
+<h3 id="completion-result"><a class="header" href="#completion-result">Completion result</a></h3>
+<p><a href="https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.completionresult">CompletionResult</a> allows escape sequences in the <code>ListItemText</code> to add color.</p>
+<pre><code class="language-sh">Function _example_completer {
+    [CompletionResult]::new("false", "`e[31mfalse`e[0m", [CompletionResultType]::ParameterValue, "false in red")
+    [CompletionResult]::new("true", "`e[32mtrue`e[0m", [CompletionResultType]::ParameterValue, "true in green")
+}
+Register-ArgumentCompleter -Native -CommandName 'example' -ScriptBlock (Get-Item "Function:_example_completer").ScriptBlock
+</code></pre>
+<p><img src="blog/2023/./puking-rainbows/powershell-color1.png" alt="" /></p>
+<p>By default, it uses tooltips to show the descriptions.
+But the value by itself often gives no sign of what it represents.</p>
+<h3 id="listitemtext"><a class="header" href="#listitemtext">ListItemText</a></h3>
+<p>Luckily, we can add the description to the <code>ListItemText</code> ourselves.</p>
+<pre><code class="language-sh">Function _example_completer {
+    [CompletionResult]::new("false", "`e[31mfalse`e[0m (false in red)", [CompletionResultType]::ParameterValue, " ")
+    [CompletionResult]::new("true", "`e[32mtrue`e[0m (true in green)", [CompletionResultType]::ParameterValue, " ")
+}
+Register-ArgumentCompleter -Native -CommandName 'example' -ScriptBlock (Get-Item "Function:_example_completer").ScriptBlock
+</code></pre>
+<p><img src="blog/2023/./puking-rainbows/powershell-color2.png" alt="" /></p>
+<blockquote>
+<p>Tooltip <strong>must not</strong> be empty though, so we need to set it to a single space.</p>
+</blockquote>
+<h3 id="selection"><a class="header" href="#selection">Selection</a></h3>
+<p>Fix the highlighting by setting <a href="https://learn.microsoft.com/en-us/powershell/module/psreadline/set-psreadlineoption#-colors"><code>Selection</code></a> to inverse.</p>
+<pre><code class="language-sh">Set-PSReadLineOption -Colors @{ "Selection" = "`e[7m" }
+</code></pre>
+<p><img src="blog/2023/./puking-rainbows/powershell-color3.png" alt="" /></p>
+<h3 id="description"><a class="header" href="#description">Description</a></h3>
+<p>And add some finishing touches to the description.</p>
+<pre><code class="language-sh">Function _example_completer {
+    [CompletionResult]::new("false", "`e[21;22;23;24;25;29m`e[31mfalse`e[21;22;23;24;25;29;39;49m`e[2m `e[2m(false in red)`e[21;22;23;24;25;29;39;49m`e[0m", [CompletionResultType]::ParameterValue, " ")
+    [CompletionResult]::new("true", "`e[21;22;23;24;25;29m`e[32mtrue`e[21;22;23;24;25;29;39;49m`e[2m `e[2m(true in green)`e[21;22;23;24;25;29;39;49m`e[0m", [CompletionResultType]::ParameterValue, " ")
+}
+Register-ArgumentCompleter -Native -CommandName 'example' -ScriptBlock (Get-Item "Function:_example_completer").ScriptBlock
+</code></pre>
+<p><img src="blog/2023/./puking-rainbows/powershell-color4.png" alt="" /></p>
+<h2 id="zsh"><a class="header" href="#zsh">Zsh</a></h2>
+<p>This one is hard.</p>
+<h3 id="arrangement"><a class="header" href="#arrangement">Arrangement</a></h3>
+<p>First, let's have a look at how <a href="https://www.zsh.org/">Zsh</a> arranges values for tab completion.</p>
+<ul>
+<li>Values <strong>without a description</strong> are arranged side-by-side.</li>
+<li>Values <strong>with a description</strong> have it appended in the format <code> -- description</code>
+It is also aligned with other entries.</li>
+<li>Values <strong>with the same description</strong> are also arranged side-by-side in front of the description.</li>
+</ul>
+<p><img src="blog/2023/./puking-rainbows/zsh-list-colors.png" alt="" /></p>
+<h3 id="zstyle"><a class="header" href="#zstyle">Zstyle</a></h3>
+<p>Colors are set using the <a href="https://zsh.sourceforge.io/Doc/Release/Zsh-Modules.html#The-zsh_002fzutil-Module">zstyle</a> <code>list-colors</code>.</p>
+<p>With <code>${curcontext}</code> we can configure it for the current context during tab completion.</p>
+<pre><code class="language-sh">zstyle ":completion:${curcontext}:*" list-colors "{...}"
+</code></pre>
+<h3 id="list-colors"><a class="header" href="#list-colors">List Colors</a></h3>
+<p>It contains a colon-separated list of <strong>patterns</strong> and <strong>formats</strong>.
+Formats are the semicolon-separated escape codes from <a href="blog/2023/puking-rainbows.html#ansi-escape-sequences">ANSI escape sequences</a>.</p>
+<p>There is a <strong>simple</strong> and a <strong>complex</strong> way to specify the patterns.</p>
+<ul>
+<li><code>=pattern=format</code> to apply one format.</li>
+<li><code>=(#b)(pattern1)(pattern2)=format0=format1=format2</code> to apply many formats.</li>
+</ul>
+<blockquote>
+<p>See <a href="https://stackoverflow.com/a/23568183">here</a> for a good explanation.</p>
+</blockquote>
+<h3 id="pattern"><a class="header" href="#pattern">Pattern</a></h3>
+<p>Given the value "true", three patterns are relevant.</p>
+<ul>
+<li><code>=(#b)(true)=0=32</code> Set "true" to <strong>green</strong> (32).</li>
+<li><code>=(#b)(true)([ ]## -- *)=0=32=2</code> Set "true" to <strong>green</strong> (32) and the description to <strong>dim</strong> (2).</li>
+<li><code>=(#b)(-- *)=0=2</code> Set the description to <strong>dim</strong> for everything else.</li>
+</ul>
+<blockquote>
+<p>Take this with a grain of salt, but there was an edge case in regards to the arrangement.
+So it's best to set both the pattern for <strong>with</strong> and <strong>without</strong> a description for each value.</p>
+</blockquote>
+<h3 id="compdef"><a class="header" href="#compdef">Compdef</a></h3>
+<p>Putting it all together.</p>
+<pre><code class="language-sh">#compdef example
+function _example_completion {
+  zstyle ":completion:${curcontext}:*" list-colors "=(#b)(false)([ ]## -- *)=0=31=2:=(#b)(false)=0=31:=(#b)(true)([ ]## -- *)=0=32=2:=(#b)(true)=0=32:=(#b)(-- *)=0=2"
+  
+  vals=('true:true in green' 'false:false in red')
+  _describe 'values' vals
+}
+compquote '' 2&gt;/dev/null &amp;&amp; _example_completion
+compdef _example_completion example
+</code></pre>
+<p><img src="blog/2023/./puking-rainbows/zsh-compdef.png" alt="" /></p>
+<h2 id="carapace"><a class="header" href="#carapace">Carapace</a></h2>
+<p>Now to how <a href="https://github.com/rsteube/carapace">carapace</a> simplifies the above.</p>
+<h3 id="style"><a class="header" href="#style">Style</a></h3>
+<p><a href="https://pkg.go.dev/github.com/rsteube/carapace/pkg/style#pkg-variables">Styles</a> are adopted from <a href="https://elv.sh/">Elvish</a>.
+There are colors like <code>style.Red</code>, modes like <code>style.Dim</code> and <code>style.Of</code> to combine them.</p>
+<h3 id="action"><a class="header" href="#action">Action</a></h3>
+<p>They can be set directly with <a href="https://rsteube.github.io/carapace/carapace/defaultActions/actionStyledValues.html">ActionStyledValues</a> and <a href="https://rsteube.github.io/carapace/carapace/defaultActions/actionStyledValuesDescribed.html">ActionStyledValuesDescribed</a>.</p>
+<pre><code class="language-go">carapace.ActionStyledValues(
+	"true", style.Green,
+	"false", style.Red,
+)
+
+carapace.ActionStyledValuesDescribed(
+	"true", "true in green", style.Green,
+	"false", "false in red", style.Red,
+)
+</code></pre>
+<h3 id="modifier"><a class="header" href="#modifier">Modifier</a></h3>
+<p>Or with the modifiers <a href="https://rsteube.github.io/carapace/carapace/action/style.html">Style</a>, <a href="https://rsteube.github.io/carapace/carapace/action/styleR.html">StyleR</a> and <a href="https://rsteube.github.io/carapace/carapace/action/styleF.html">StyleF</a>.</p>
+<pre><code class="language-go">carapace.ActionValues(
+	"1",
+	"true",
+).Style(style.Green)
+
+carapace.ActionValues(
+	"0",
+	"false",
+).StyleR(&amp;style.Carapace.KeywordNegative)
+
+carapace.ActionValues(
+	"true",
+	"false",
+	"unknown",
+).StyleF(func(s string, sc style.Context) string {
+	switch s {
+	case "true":
+		return style.Green
+	case "false":
+		return style.Red
+	default:
+		return style.Default
+	}
+})
+</code></pre>
+<h3 id="style-functions"><a class="header" href="#style-functions">Style functions</a></h3>
+<p>The following functions can be passed to <a href="https://rsteube.github.io/carapace/carapace/action/styleF.html">StyleF</a> for common highlighting tasks:</p>
+<ul>
+<li><a href="https://pkg.go.dev/github.com/rsteube/carapace/pkg/style#ForPath">ForPath</a> highlights paths using the <code>LS_COLORS</code> environment variable.</li>
+</ul>
+<p><img src="blog/2023/./puking-rainbows/style-forpath.png" alt="" /></p>
+<ul>
+<li><a href="https://pkg.go.dev/github.com/rsteube/carapace/pkg/style#ForPathExt">ForPathExt</a> does the same, but by extension only.</li>
+</ul>
+<p><img src="blog/2023/./puking-rainbows/style-forpathext.png" alt="" /></p>
+<ul>
+<li><a href="https://pkg.go.dev/github.com/rsteube/carapace/pkg/style#ForLogLevel">ForLogLevel</a> highlights log levels.</li>
+</ul>
+<p><img src="blog/2023/./puking-rainbows/style-loglevel.png" alt="" /></p>
+<ul>
+<li><a href="https://pkg.go.dev/github.com/rsteube/carapace/pkg/style#ForKeyword">ForKeyword</a> highlights common keywords like <strong>true</strong> and <strong>false</strong>.</li>
+</ul>
+<p><img src="blog/2023/./puking-rainbows/style-keyword.png" alt="" /></p>
+<hr />
+<h2 id="thats-all"><a class="header" href="#thats-all">That's all</a></h2>
+<p>Enjoy the rainbow!</p>
+<p><img src="blog/2023/./puking-rainbows/rainbow.png" alt="" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="2022"><a class="header" href="#2022">2022</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="a-pragmatic-approach-to-shell-completion"><a class="header" href="#a-pragmatic-approach-to-shell-completion">A pragmatic approach to shell completion</a></h1>
+<h2 id="the-rise-of-new-shells"><a class="header" href="#the-rise-of-new-shells">The rise of new shells</a></h2>
+<p>One of the biggest improvements to my terminal experience was the switch from <a href="https://www.gnu.org/software/bash/">Bash</a> to <a href="https://www.zsh.org/">Zsh</a>.
+The reason for this is the astonishing amount of completions provided by the community.
+As well as something I didn't know of before: menu completion. A mode where you can cycle through the possible values. But like <a href="https://www.vim.org/">vim</a> <a href="https://www.zsh.org/">Zsh</a> is quite tough on new users.</p>
+<p>Then there was <a href="https://fishshell.com/">Fish</a>. A shell that is more accessible to new users and thus calls itself friendly. But one major catch: the break from <a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a>.
+This is actually a good thing yet the lack of completions at the time prevented me to make the switch.</p>
+<p>Now there is a new generation of shells that allow passing structured data through a pipe. This is a major thing and well worth its <a href="https://medium.com/@browninfosecguy/powershell-pipeline-182ea25c622">own article</a>.</p>
+<p>One of these is <a href="https://elv.sh/">Elvish</a>, a shell written in Go that runs on Linux, BSDs, macOS, and Windows.
+It is also the shell that managed to make me switch again.</p>
+<p>But let's focus on another of its features: filtering of entries during menu completion.
+And not just the values but the descriptions as well. You will understand later why this is important.</p>
+<p><a href="https://elv.sh/">Elvish</a> only has a few completions though so I am back at the same problem I had with <a href="https://fishshell.com/">Fish</a>.
+This time however I've got some tools under my belt.</p>
+<p>So let's change that...</p>
+<h2 id="command-line-arguments"><a class="header" href="#command-line-arguments">Command-line arguments</a></h2>
+<p>Arguments passed to your application are just that: simple words. How these are parsed is logically defined by your application. Which is the reason why we have such an inconsistent mess.</p>
+<p>So for the sake of simplicity let's concentrate on the more prevalent <a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a> (GNU) style.
+Here we got shorthand flags <code>-s</code>, longhand flags <code>--long</code>, subcommands, and positional arguments.
+Some flags take an argument <code>-a value</code>. Others accept an optional argument directly attached to the flag name <code>--flagname=optionalValue</code>.</p>
+<p>You can refer to <a href="https://en.wikipedia.org/wiki/Command-line_interface#Anatomy_of_a_shell_CLI">Anatomy of a shell CLI</a> for a more sophisticated description.</p>
+<h2 id="how-does-shell-completion-work"><a class="header" href="#how-does-shell-completion-work">How does shell completion work</a></h2>
+<p>The core concept is to split up the current command line (until the current cursor position) into words.
+Depending on these the completion script returns possible values to replace the current word with.</p>
+<pre><code class="language-sh">command --flag1 positionalArg1 "positionalArg2 with space" &lt;TAB&gt;
+# ['command', '--flag1', 'positionalArg1', 'positionalArg2 with space', '']
+# positionalArg3
+# Arg3
+# thirdArg
+</code></pre>
+<p>The value to use is either determined by menu selection or filtering until there is only one.</p>
+<pre><code class="language-sh">command --flag1 positionalArg1 "positionalArg2 with space" thi&lt;TAB&gt;
+# ['command', '--flag1', 'positionalArg1', 'positionalArg2 with space', 'thi']
+# thirdArg
+</code></pre>
+<h2 id="what-makes-shell-completion-so-complicated"><a class="header" href="#what-makes-shell-completion-so-complicated">What makes shell completion so complicated</a></h2>
+<p>The shell does not know the argument structure of your application.
+So we have to tell it about subcommands, flags, and positional arguments.
+But few provide a decent framework for this.</p>
+<p>Then there are various caveats like special characters not being escaped.
+These need to be addressed. For each application. For each shell. Over and over again.
+In a scripting language, you are likely unfamiliar with and is hard to debug.</p>
+<p>Completion scripts also tend to get quite <a href="https://github.com/git/git/blob/master/contrib/completion/git-completion.bash">large and hard to read</a>.</p>
+<h2 id="a-different-approach-to-shell-completion"><a class="header" href="#a-different-approach-to-shell-completion">A different approach to shell completion</a></h2>
+<p>One way to avoid writing the completion scripts by hand is to generate them. This is a feature provided by several argument parsers and ensures the scripts are kept in sync with your application.
+But due to the difficulty of creating a generator, you can expect some issues:</p>
+<ul>
+<li>it supports only a few shells</li>
+<li>it is limited to flags and subcommands</li>
+<li>if there is support for value completion it only completes static values
+<pre><code class="language-sh">["fixed", "words"] # static
+$(command generate values) # dynamic
+</code></pre>
+</li>
+<li>it only mimics your argument structure and subcommand determination is <a href="https://github.com/fish-shell/fish-shell/blob/master/share/functions/__fish_seen_subcommand_from.fish">rather optimistic</a></li>
+<li>you still end up with large scripts that are hard to debug</li>
+<li>inconsistencies between shells</li>
+</ul>
+<p>A different approach is to only use the completion script to pass the words as arguments to your application.</p>
+<pre><code class="language-sh">command --flag1 positionalArg1 "positionalArg2 with space" &lt;TAB&gt;
+# command complete command --flag1 positionalArg1 "positionalArg2 with space" ''
+</code></pre>
+<p>The argument parser then does what it is meant to do and the application returns the possible values.
+This has several benefits:</p>
+<ul>
+<li>short scripts that are the same for each application</li>
+<li>easy testing of completion by invoking the application</li>
+<li>argument structure and subcommand determination is exact</li>
+<li>consistent behavior between shells</li>
+<li>completion possibilities that exceed what the shell provides</li>
+<li>adding new shells is quite simple</li>
+</ul>
+<p>However, the startup time of the application matters as it affects the overall experience.</p>
+<p>Now to the tools...</p>
+<h2 id="carapace-1"><a class="header" href="#carapace-1">carapace</a></h2>
+<p><a href="https://github.com/rsteube/carapace">carapace</a> is a command argument completion generator based on <a href="https://github.com/spf13/cobra">cobra</a>.
+It started as a mere fork of <a href="https://github.com/spf13/cobra/pull/646">#646</a> with added dynamic completion while waiting for pull requests to be merged.
+But development regarding this was a bit stale* at the time and it ultimately became a project of its own.</p>
+<p>It currently supports consistent dynamic completion for <a href="https://www.gnu.org/software/bash/">Bash</a>, <a href="https://elv.sh/">Elvish</a>, <a href="https://fishshell.com/">Fish</a>, <a href="https://doc.redox-os.org/ion-manual/">Ion</a>, <a href="https://www.nushell.sh/">Nushell</a>, <a href="http://www.oilshell.org/">Oil</a>, <a href="https://microsoft.com/powershell">Powershell</a>, <a href="https://www.tcsh.org/">Tcsh</a>, <a href="https://xon.sh/">Xonsh</a>, and <a href="https://www.zsh.org/">Zsh</a>.</p>
+<p><em>(*) Things have changed though and by now cobra has dynamic completion as well. It even took a similar approach so be sure to check that out.</em></p>
+<h2 id="rawvalue"><a class="header" href="#rawvalue">RawValue</a></h2>
+<p><a href="https://pkg.go.dev/github.com/rsteube/carapace@v0.12.1/internal/common#RawValue">RawValue</a> is the internal representation of possible completion values.
+It contains the actual value to be inserted, a display value to be shown during completion, and a description. It is important to split these as some shells show the description as a tooltip and to keep the display values short.</p>
+<pre><code class="language-sh">chown cups:&lt;TAB&gt;
+# ['chown', 'cups:']
+# {"value": "cups:audio", "display": "audio", "description":, "995"}
+# {"value": "cups:root", "display": "root", "description":, "0"}
+</code></pre>
+<h2 id="action-1"><a class="header" href="#action-1">Action</a></h2>
+<p>An <a href="https://rsteube.github.io/carapace/carapace/action.html">Action</a> indicates how to complete a flag or positional argument.
+It contains either the static <a href="https://pkg.go.dev/github.com/rsteube/carapace@v0.12.1/internal/common#RawValue">RawValue</a>s or a function to generate them. Also some metadata like whether a space suffix shall be added.
+None of this is public though and interaction with it is accomplished purely through functions.</p>
+<p>One core function which pretty much all others end up using is <a href="https://rsteube.github.io/carapace/carapace/action/actionValuesDescribed.html">ActionValuesDescribed</a>.</p>
+<pre><code class="language-go">ActionValuesDescribed(
+  "audio", "995",
+  "root", "0",
+)
+// {"value": "audio", "display": "audio", "description":, "995"}
+// {"value": "root", "display": "root", "description":, "0"}
+</code></pre>
+<h2 id="reusability"><a class="header" href="#reusability">Reusability</a></h2>
+<p>A great aspect of an <a href="https://rsteube.github.io/carapace/carapace/action.html">Action</a> is its reusability. Let's have a closer look at the <code>user:group</code> completion of <a href="https://github.com/rsteube/carapace-bin/blob/0.8.1/completers/chown_completer/cmd/root.go">chown</a>.</p>
+<p>It uses <a href="https://rsteube.github.io/carapace/carapace/action/actionMultiParts.html">ActionMultiParts</a> which implicitly splits the current word (or part of it as these can be nested as well).
+The parts themself are completed with <a href="https://github.com/rsteube/carapace-bin/blob/0.8.1/pkg/actions/os/os.go#L168">ActionUsers</a> and <a href="https://github.com/rsteube/carapace-bin/blob/0.8.1/pkg/actions/os/os.go#L34">ActionGroups</a>. Here the first one is invoked explicitly to add a <code>:</code> suffix to the inserted values.</p>
+<pre><code class="language-go">// ActionUserGroup completes system user:group separately
+//   bin:audio
+//   lp:list
+func ActionUserGroup() carapace.Action {
+	return carapace.ActionMultiParts(":", func(c carapace.Context) carapace.Action {
+		switch len(c.Parts) {
+		case 0:
+			return ActionUsers().Invoke(c).Suffix(":").ToA()
+		case 1:
+			return ActionGroups()
+		default:
+			return carapace.ActionValues()
+		}
+	})
+}
+</code></pre>
+<h2 id="flexibility"><a class="header" href="#flexibility">Flexibility</a></h2>
+<p>The <a href="https://github.com/rsteube/carapace-bin/blob/0.8.1/completers/chown_completer/cmd/root.go">chown</a> command generally takes <code>user:group</code> as first positional argument and files otherwise.
+But here's the twist: when the <code>--reference</code> flag is used the first positional argument is also a file.
+The benefit of an argument parser is that this can be checked pretty easily.</p>
+<pre><code class="language-go">rootCmd.Flags().String("reference", "", "use RFILE's owner and group rather than specifying OWNER:GROUP values")
+
+carapace.Gen(rootCmd).FlagCompletion(carapace.ActionMap{
+	"reference": carapace.ActionFiles(), // register flag argument completion
+})
+
+carapace.Gen(rootCmd).PositionalCompletion( // register completion for position 1..
+	carapace.ActionCallback(func(c carapace.Context) carapace.Action {
+		if rootCmd.Flag("reference").Changed { // check if --reference flag was used
+			return carapace.ActionFiles()
+		} else {
+			return os.ActionUserGroup()
+		}
+	}),
+)
+
+carapace.Gen(rootCmd).PositionalAnyCompletion(
+	carapace.ActionFiles(), // complete files for every other position
+)
+</code></pre>
+<h2 id="caching"><a class="header" href="#caching">Caching</a></h2>
+<p>The more dynamic the completions are the more apparent it becomes that caching is needed.
+And while <a href="https://graphql.org/">GraphQL</a> has proven to be great to keep transferred data minimal and thus delays are small it is good to avoid unnecessary internet roundtrips.</p>
+<p><a href="https://rsteube.github.io/carapace/carapace/cache.html">Cache</a> wraps an <a href="https://rsteube.github.io/carapace/carapace/action.html">Action</a> and persists the generated <a href="https://pkg.go.dev/github.com/rsteube/carapace@v0.12.1/internal/common#RawValue">RawValue</a>s as json on disk. On the next invocation these are loaded unless the timeout has exceeded.</p>
+<pre><code class="language-go">func ActionIssueLabels(project string) carapace.Action {
+    return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
+        // retrieve labels for project
+    }).Cache(24*time.Hour, cache.String(project))
+}
+</code></pre>
+<h2 id="batch-processing"><a class="header" href="#batch-processing">Batch processing</a></h2>
+<p>Some <a href="https://rsteube.github.io/carapace/carapace/action.html">Action</a>s consist of several others. And invoking them sequentially can take a considerable amount of time.
+<a href="https://rsteube.github.io/carapace/carapace/batch.html">Batch</a> bundles these so that they can be invoked in parallel using goroutines.</p>
+<p>The positional completion for the <a href="https://github.com/rsteube/carapace-bin/blob/25e9706d444d979d15d35bc245bd81f47c686cf5/completers/docker_completer/cmd/inspect.go">docker inspect</a> command is such a case.</p>
+<pre><code class="language-go">carapace.Batch(
+	docker.ActionContainers(),
+	docker.ActionNetworks(),
+	docker.ActionNodes().Supress("This node is not a swarm manager"),
+	docker.ActionRepositoryTags(),
+	docker.ActionSecrets().Supress("This node is not a swarm manager"),
+	docker.ActionServices().Supress("This node is not a swarm manager"),
+	docker.ActionVolumes(),
+).ToA()
+</code></pre>
+<h2 id="carapace-bin"><a class="header" href="#carapace-bin">carapace-bin</a></h2>
+<p>What originally was a sandbox for trying out <a href="https://github.com/rsteube/carapace">carapace</a> has evolved to <a href="https://github.com/rsteube/carapace-bin">carapace-bin</a>.
+A command argument completer working across multiple shells and for multiple commands.
+It can be seen as my personal collection of completions baked into a single binary.</p>
+<p>One command I am using a lot is the <a href="https://cli.github.com/">GitHub CLI</a>.
+Here, the importance of description filtering mentioned in the beginning becomes obvious.
+E.g. the issue number on its own is not very helpful at finding the one you are looking for.
+<img src="blog/2022/./a-pragmatic-approach-to-shell-completion/carapace-bin.cast" alt="" /></p>
+<h2 id="a-sample-application"><a class="header" href="#a-sample-application">A sample application</a></h2>
+<p>Writing tools always felt very limited.
+While it's quick to create a CLI nowadays, without shell completion it lacks usability.
+<a href="https://github.com/rsteube/go-jira-cli">go-jira-cli</a> is a quick take to see what is possible with <a href="https://github.com/rsteube/carapace">carapace</a>.</p>
+<p>It is a simple <a href="https://www.atlassian.com/software/jira">Jira</a> terminal client composed of <a href="https://github.com/rsteube/carapace">carapace</a>, <a href="https://github.com/andygrunwald/go-jira">go-jira</a>, and <a href="https://cli.github.com/">GitHub CLI</a>.
+Here, flag completion has a strong dependency on other flag values. Also, notice the initial delay of the component flag which wasn't cached yet.</p>
+<p><img src="blog/2022/./a-pragmatic-approach-to-shell-completion/go-jira-cli.cast" alt="" /></p>
+<h2 id="lazycomplete"><a class="header" href="#lazycomplete">lazycomplete</a></h2>
+<p>Commands are often sourced in shell startup scripts to register the completion.</p>
+<pre><code class="language-sh">source &lt;(command completion)
+</code></pre>
+<p>But this is generally <a href="https://jzelinskie.com/posts/dont-recommend-sourcing-shell-completion/">discouraged</a> because it slows down the shell startup. Invoking the command is not wrong per se though but rather a symptom of the shell doing this eagerly.</p>
+<p><a href="https://github.com/rsteube/lazycomplete">lazycomplete</a> circumvents this problem by registering a temporary completion function that replaces itself on the first <code>&lt;TAB&gt;</code> with the actual one.
+The initial delay is thus reduced to a single command invocation.
+It is the same concept <a href="https://github.com/rsteube/carapace-bin">carapace-bin</a> uses to register all of its completers in mere milliseconds.</p>
+<pre><code class="language-sh">source &lt;(lazycomplete \
+  example 'example _carapace' \
+  lab 'lab completion' \
+)
+
+# _lazycomplete_example() {
+#   unset -f _lazycomplete_example
+#   source &lt;(example _carapace)
+#   $"$(complete -p example | awk '{print $3}')"
+# }
+# complete -F _lazycomplete_example example
+# 
+# _lazycomplete_lab() {
+#   unset -f _lazycomplete_lab
+#   source &lt;(lab completion)
+#   $"$(complete -p lab | awk '{print $3}')"
+# }
+# complete -F _lazycomplete_lab lab
+</code></pre>
+<h2 id="afterword"><a class="header" href="#afterword">Afterword</a></h2>
+<p>All this is a limited view of the more easy part of shell completion though.
+<a href="https://github.com/spf13/pflag">pflag</a> is a flag parser for <a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a> so completing commands not adhering to it quickly becomes quite hacky (at least for the moment).
+But thanks to the high-level abstraction this can be improved without affecting the actual completers too much.</p>
+<p>A great benefit is that I can now switch between shells without feeling out of place.
+Shells become a specialized tool I can use not something I am stuck with.
+I can open <a href="https://www.gnu.org/software/bash/">Bash</a>/<a href="https://www.zsh.org/">Zsh</a> when I am copying a <a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a> snippet from the internet.
+Maybe <a href="https://xon.sh/">Xonsh</a> for something ML-related. Or <a href="https://www.nushell.sh/">Nushell</a> to work with <a href="https://www.nushell.sh/book/dataframes.html">large data</a>.</p>
+<p>So while it's certainly not without issues and still has some messy parts it works pretty well for me until someone comes up with a better solution.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="asciinema/asciinema-player.min.js"></script>
+        <script src="asciinema/load.js"></script>
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

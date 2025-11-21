@@ -1,0 +1,446 @@
+<!DOCTYPE HTML>
+<html lang="en" class="mocha" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Puking Rainbows - rsteube</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../asciinema/asciinema-player.css">
+        <link rel="stylesheet" href="../.././theme/catppuccin.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "mocha";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('mocha')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../blog.html"><strong aria-hidden="true">1.</strong> Blog</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../blog/2023.html"><strong aria-hidden="true">1.1.</strong> 2023</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../blog/2023/go-bigger-than-crab.html"><strong aria-hidden="true">1.1.1.</strong> Go is bigger than crab!</a></li><li class="chapter-item expanded "><a href="../../blog/2023/puking-rainbows.html" class="active"><strong aria-hidden="true">1.1.2.</strong> Puking Rainbows</a></li></ol></li><li class="chapter-item expanded "><a href="../../blog/2022.html"><strong aria-hidden="true">1.2.</strong> 2022</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../blog/2022/a-pragmatic-approach-to-shell-completion.html"><strong aria-hidden="true">1.2.1.</strong> A pragmatic approach to shell completion</a></li></ol></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">rsteube</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rsteube/rsteube.github.io" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rsteube/restuebe.github.io/edit/master/docs/src/blog/2023/puking-rainbows.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="puking-rainbows"><a class="header" href="#puking-rainbows">Puking Rainbows</a></h1>
+<p><img src="./puking-rainbows/puking-rainbows-banner.png" alt="" /></p>
+<p>Shells support colored output. Some do so also during tab completion.</p>
+<p>It can provide extra context like whether an issue is <strong>open</strong> (green) or <strong>closed</strong> (red).
+Or reflect the color of labels:</p>
+<p><img src="./puking-rainbows/labels.png" alt="" /></p>
+<p>Here is how this works and how it is done in <a href="https://github.com/rsteube/carapace">carapace</a>...</p>
+<h2 id="ansi-escape-sequences"><a class="header" href="#ansi-escape-sequences">ANSI escape sequences</a></h2>
+<p>Text style is set in the shell using an escape sequence like <code>\e[31;42m</code>.
+This instructs the terminal that the text following it is <strong>red</strong> (31) with a <strong>green background</strong> (41).</p>
+<p>It consists of</p>
+<ul>
+<li><code>\e</code> escape.</li>
+<li><code>[</code> an opening square bracket.</li>
+<li><code>31;42</code> a semicolon-separated list of escape codes.</li>
+<li><code>m</code> the letter m.</li>
+</ul>
+<p>A common approach is to restore the default style using <code>\e[0m</code> afterwards.</p>
+<pre><code class="language-sh">echo "\e[1;2;4;35mdim bold underlined magenta\e[0m" # you might need `echo -e` for this
+</code></pre>
+<p><img src="./puking-rainbows/ansi-example.png" alt="" /></p>
+<p>There are basic <strong>foreground colors</strong> (30-37), <strong>background colors</strong> (40-47),
+<strong>modes</strong> (1-9) and <strong>reset</strong> (0) to restore the default. <strong>256-colors</strong>
+and <strong>RGB</strong> are also possible.</p>
+<blockquote>
+<p>You can find a full list at <a href="https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797">ANSI Escape Sequences</a>.</p>
+</blockquote>
+<h2 id="elvish"><a class="header" href="#elvish">Elvish</a></h2>
+<p>This one is easy.</p>
+<h3 id="styled"><a class="header" href="#styled">Styled</a></h3>
+<p><a href="https://elv.sh/">Elvish</a> provides an abstraction for escape sequences using a list of human-readable keywords.</p>
+<pre><code class="language-sh">echo (styled "dim bold underlined magenta" dim bold underlined magenta)
+</code></pre>
+<p><img src="./puking-rainbows/elvish-styled.png" alt="" /></p>
+<blockquote>
+<p>You can read more about this at <a href="https://elv.sh/ref/builtin.html#styled">styled</a>.</p>
+</blockquote>
+<h3 id="complex-candidate"><a class="header" href="#complex-candidate">Complex candidate</a></h3>
+<p>Adding colors to tab completion is thus pretty easy with <a href="https://elv.sh/ref/edit.html#edit:complex-candidate">edit:complex-candidate</a>.</p>
+<pre><code class="language-sh">set edit:completion:arg-completer[example] = {|@args|
+  edit:complex-candidate true &amp;display=(styled true green)' (true in green)'
+  edit:complex-candidate false &amp;display=(styled false red)' (false in red)'
+}
+</code></pre>
+<p><img src="./puking-rainbows/elvish-example.png" alt="" /></p>
+<h2 id="powershell"><a class="header" href="#powershell">Powershell</a></h2>
+<p>This one is a bit tricky.</p>
+<h3 id="backtick"><a class="header" href="#backtick">Backtick</a></h3>
+<p>First of all, the escape character is different in <a href="https://learn.microsoft.com/en-us/powershell/">Powershell</a>.
+It uses <strong>backtick</strong> instead of <strong>backslash</strong>.</p>
+<pre><code class="language-sh">echo "`e[1;2;4;35mdim bold underlined magenta`e[0m"
+</code></pre>
+<p><img src="./puking-rainbows/powershell-ansi.png" alt="" /></p>
+<h3 id="completion-result"><a class="header" href="#completion-result">Completion result</a></h3>
+<p><a href="https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.completionresult">CompletionResult</a> allows escape sequences in the <code>ListItemText</code> to add color.</p>
+<pre><code class="language-sh">Function _example_completer {
+    [CompletionResult]::new("false", "`e[31mfalse`e[0m", [CompletionResultType]::ParameterValue, "false in red")
+    [CompletionResult]::new("true", "`e[32mtrue`e[0m", [CompletionResultType]::ParameterValue, "true in green")
+}
+Register-ArgumentCompleter -Native -CommandName 'example' -ScriptBlock (Get-Item "Function:_example_completer").ScriptBlock
+</code></pre>
+<p><img src="./puking-rainbows/powershell-color1.png" alt="" /></p>
+<p>By default, it uses tooltips to show the descriptions.
+But the value by itself often gives no sign of what it represents.</p>
+<h3 id="listitemtext"><a class="header" href="#listitemtext">ListItemText</a></h3>
+<p>Luckily, we can add the description to the <code>ListItemText</code> ourselves.</p>
+<pre><code class="language-sh">Function _example_completer {
+    [CompletionResult]::new("false", "`e[31mfalse`e[0m (false in red)", [CompletionResultType]::ParameterValue, " ")
+    [CompletionResult]::new("true", "`e[32mtrue`e[0m (true in green)", [CompletionResultType]::ParameterValue, " ")
+}
+Register-ArgumentCompleter -Native -CommandName 'example' -ScriptBlock (Get-Item "Function:_example_completer").ScriptBlock
+</code></pre>
+<p><img src="./puking-rainbows/powershell-color2.png" alt="" /></p>
+<blockquote>
+<p>Tooltip <strong>must not</strong> be empty though, so we need to set it to a single space.</p>
+</blockquote>
+<h3 id="selection"><a class="header" href="#selection">Selection</a></h3>
+<p>Fix the highlighting by setting <a href="https://learn.microsoft.com/en-us/powershell/module/psreadline/set-psreadlineoption#-colors"><code>Selection</code></a> to inverse.</p>
+<pre><code class="language-sh">Set-PSReadLineOption -Colors @{ "Selection" = "`e[7m" }
+</code></pre>
+<p><img src="./puking-rainbows/powershell-color3.png" alt="" /></p>
+<h3 id="description"><a class="header" href="#description">Description</a></h3>
+<p>And add some finishing touches to the description.</p>
+<pre><code class="language-sh">Function _example_completer {
+    [CompletionResult]::new("false", "`e[21;22;23;24;25;29m`e[31mfalse`e[21;22;23;24;25;29;39;49m`e[2m `e[2m(false in red)`e[21;22;23;24;25;29;39;49m`e[0m", [CompletionResultType]::ParameterValue, " ")
+    [CompletionResult]::new("true", "`e[21;22;23;24;25;29m`e[32mtrue`e[21;22;23;24;25;29;39;49m`e[2m `e[2m(true in green)`e[21;22;23;24;25;29;39;49m`e[0m", [CompletionResultType]::ParameterValue, " ")
+}
+Register-ArgumentCompleter -Native -CommandName 'example' -ScriptBlock (Get-Item "Function:_example_completer").ScriptBlock
+</code></pre>
+<p><img src="./puking-rainbows/powershell-color4.png" alt="" /></p>
+<h2 id="zsh"><a class="header" href="#zsh">Zsh</a></h2>
+<p>This one is hard.</p>
+<h3 id="arrangement"><a class="header" href="#arrangement">Arrangement</a></h3>
+<p>First, let's have a look at how <a href="https://www.zsh.org/">Zsh</a> arranges values for tab completion.</p>
+<ul>
+<li>Values <strong>without a description</strong> are arranged side-by-side.</li>
+<li>Values <strong>with a description</strong> have it appended in the format <code> -- description</code>
+It is also aligned with other entries.</li>
+<li>Values <strong>with the same description</strong> are also arranged side-by-side in front of the description.</li>
+</ul>
+<p><img src="./puking-rainbows/zsh-list-colors.png" alt="" /></p>
+<h3 id="zstyle"><a class="header" href="#zstyle">Zstyle</a></h3>
+<p>Colors are set using the <a href="https://zsh.sourceforge.io/Doc/Release/Zsh-Modules.html#The-zsh_002fzutil-Module">zstyle</a> <code>list-colors</code>.</p>
+<p>With <code>${curcontext}</code> we can configure it for the current context during tab completion.</p>
+<pre><code class="language-sh">zstyle ":completion:${curcontext}:*" list-colors "{...}"
+</code></pre>
+<h3 id="list-colors"><a class="header" href="#list-colors">List Colors</a></h3>
+<p>It contains a colon-separated list of <strong>patterns</strong> and <strong>formats</strong>.
+Formats are the semicolon-separated escape codes from <a href="#ansi-escape-sequences">ANSI escape sequences</a>.</p>
+<p>There is a <strong>simple</strong> and a <strong>complex</strong> way to specify the patterns.</p>
+<ul>
+<li><code>=pattern=format</code> to apply one format.</li>
+<li><code>=(#b)(pattern1)(pattern2)=format0=format1=format2</code> to apply many formats.</li>
+</ul>
+<blockquote>
+<p>See <a href="https://stackoverflow.com/a/23568183">here</a> for a good explanation.</p>
+</blockquote>
+<h3 id="pattern"><a class="header" href="#pattern">Pattern</a></h3>
+<p>Given the value "true", three patterns are relevant.</p>
+<ul>
+<li><code>=(#b)(true)=0=32</code> Set "true" to <strong>green</strong> (32).</li>
+<li><code>=(#b)(true)([ ]## -- *)=0=32=2</code> Set "true" to <strong>green</strong> (32) and the description to <strong>dim</strong> (2).</li>
+<li><code>=(#b)(-- *)=0=2</code> Set the description to <strong>dim</strong> for everything else.</li>
+</ul>
+<blockquote>
+<p>Take this with a grain of salt, but there was an edge case in regards to the arrangement.
+So it's best to set both the pattern for <strong>with</strong> and <strong>without</strong> a description for each value.</p>
+</blockquote>
+<h3 id="compdef"><a class="header" href="#compdef">Compdef</a></h3>
+<p>Putting it all together.</p>
+<pre><code class="language-sh">#compdef example
+function _example_completion {
+  zstyle ":completion:${curcontext}:*" list-colors "=(#b)(false)([ ]## -- *)=0=31=2:=(#b)(false)=0=31:=(#b)(true)([ ]## -- *)=0=32=2:=(#b)(true)=0=32:=(#b)(-- *)=0=2"
+  
+  vals=('true:true in green' 'false:false in red')
+  _describe 'values' vals
+}
+compquote '' 2&gt;/dev/null &amp;&amp; _example_completion
+compdef _example_completion example
+</code></pre>
+<p><img src="./puking-rainbows/zsh-compdef.png" alt="" /></p>
+<h2 id="carapace"><a class="header" href="#carapace">Carapace</a></h2>
+<p>Now to how <a href="https://github.com/rsteube/carapace">carapace</a> simplifies the above.</p>
+<h3 id="style"><a class="header" href="#style">Style</a></h3>
+<p><a href="https://pkg.go.dev/github.com/rsteube/carapace/pkg/style#pkg-variables">Styles</a> are adopted from <a href="https://elv.sh/">Elvish</a>.
+There are colors like <code>style.Red</code>, modes like <code>style.Dim</code> and <code>style.Of</code> to combine them.</p>
+<h3 id="action"><a class="header" href="#action">Action</a></h3>
+<p>They can be set directly with <a href="https://rsteube.github.io/carapace/carapace/defaultActions/actionStyledValues.html">ActionStyledValues</a> and <a href="https://rsteube.github.io/carapace/carapace/defaultActions/actionStyledValuesDescribed.html">ActionStyledValuesDescribed</a>.</p>
+<pre><code class="language-go">carapace.ActionStyledValues(
+	"true", style.Green,
+	"false", style.Red,
+)
+
+carapace.ActionStyledValuesDescribed(
+	"true", "true in green", style.Green,
+	"false", "false in red", style.Red,
+)
+</code></pre>
+<h3 id="modifier"><a class="header" href="#modifier">Modifier</a></h3>
+<p>Or with the modifiers <a href="https://rsteube.github.io/carapace/carapace/action/style.html">Style</a>, <a href="https://rsteube.github.io/carapace/carapace/action/styleR.html">StyleR</a> and <a href="https://rsteube.github.io/carapace/carapace/action/styleF.html">StyleF</a>.</p>
+<pre><code class="language-go">carapace.ActionValues(
+	"1",
+	"true",
+).Style(style.Green)
+
+carapace.ActionValues(
+	"0",
+	"false",
+).StyleR(&amp;style.Carapace.KeywordNegative)
+
+carapace.ActionValues(
+	"true",
+	"false",
+	"unknown",
+).StyleF(func(s string, sc style.Context) string {
+	switch s {
+	case "true":
+		return style.Green
+	case "false":
+		return style.Red
+	default:
+		return style.Default
+	}
+})
+</code></pre>
+<h3 id="style-functions"><a class="header" href="#style-functions">Style functions</a></h3>
+<p>The following functions can be passed to <a href="https://rsteube.github.io/carapace/carapace/action/styleF.html">StyleF</a> for common highlighting tasks:</p>
+<ul>
+<li><a href="https://pkg.go.dev/github.com/rsteube/carapace/pkg/style#ForPath">ForPath</a> highlights paths using the <code>LS_COLORS</code> environment variable.</li>
+</ul>
+<p><img src="./puking-rainbows/style-forpath.png" alt="" /></p>
+<ul>
+<li><a href="https://pkg.go.dev/github.com/rsteube/carapace/pkg/style#ForPathExt">ForPathExt</a> does the same, but by extension only.</li>
+</ul>
+<p><img src="./puking-rainbows/style-forpathext.png" alt="" /></p>
+<ul>
+<li><a href="https://pkg.go.dev/github.com/rsteube/carapace/pkg/style#ForLogLevel">ForLogLevel</a> highlights log levels.</li>
+</ul>
+<p><img src="./puking-rainbows/style-loglevel.png" alt="" /></p>
+<ul>
+<li><a href="https://pkg.go.dev/github.com/rsteube/carapace/pkg/style#ForKeyword">ForKeyword</a> highlights common keywords like <strong>true</strong> and <strong>false</strong>.</li>
+</ul>
+<p><img src="./puking-rainbows/style-keyword.png" alt="" /></p>
+<hr />
+<h2 id="thats-all"><a class="header" href="#thats-all">That's all</a></h2>
+<p>Enjoy the rainbow!</p>
+<p><img src="./puking-rainbows/rainbow.png" alt="" /></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blog/2023/go-bigger-than-crab.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../blog/2022.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blog/2023/go-bigger-than-crab.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../blog/2022.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../../asciinema/asciinema-player.min.js"></script>
+        <script src="../../asciinema/load.js"></script>
+
+
+    </div>
+    </body>
+</html>
