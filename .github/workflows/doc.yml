@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     container: ghcr.io/rsteube/carapace
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: "build docs"
         run: mdbook build docs
 
